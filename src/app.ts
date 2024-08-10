@@ -9,6 +9,11 @@ app.use(
     credentials: true,
   })
 );
+
+app.get("/health", (req, res) => {
+  res.send({ message: "Server is up and running" });
+});
+
 app.use(express.json({ limit: "20kb" }));
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
