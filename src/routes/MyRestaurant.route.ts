@@ -6,10 +6,14 @@ import { createMyRestaurant } from "../controllers/MyRestaurant.controller";
 
 const router = Router();
 
-router.route("/").post(
-  upload.single("imageFile"),
-
-  createMyRestaurant
-);
+router
+  .route("/")
+  .post(
+    upload.single("imageFile"),
+    validateMyUserRequest,
+    jwtCheck,
+    jwtParse,
+    createMyRestaurant
+  );
 
 export default router;
