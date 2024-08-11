@@ -18,5 +18,7 @@ app.use(express.json({ limit: "20kb" }));
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 import userRouter from "./routes/user.route";
+import restaurantRouter from "./routes/MyRestaurant.route";
 app.use("/users", userRouter);
+app.use("/restaurants", restaurantRouter);
 export default app;
