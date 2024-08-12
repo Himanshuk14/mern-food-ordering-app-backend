@@ -35,4 +35,31 @@ const getMyRestaurant = asyncHandler(async (req: Request, res: Response) => {
   res.status(200).json(restaurant.toObject());
 });
 
-export { createMyRestaurant, getMyRestaurant };
+const updateMyRestaurant = asyncHandler(async (req: Request, res: Response) => {
+  const restaurant = await Restaurant.findOne({ user: req.userId });
+  if (!restaurant) {
+    return res.status(404).json({ message: "Restaurant not found" });
+  }
+  restaurant.restaurantName = req.body.restaurantName;
+  restaurant.city = req.body.city;
+  restaurant.country = req.body.country;
+  restaurant.deliveryPrice = req.body.deliveryPrice;
+  restaurant.estimatedDeliveryTime = req.body.estimatedDeliveryTime;
+  restaurant.cuisines = req.body.cuisines;
+  restaurant.menuItems = req.body.menuItems;
+  restaurant.lastUpdated = new Date();
+
+  if (req.file) {
+    const image = req.file as Express.Multer.File;
+    const uploadResponse = await uploadOnCloudinary(image.path);
+    if (!uploadResponse) {
+      throw new ApiError(500, "Image upload failed");
+    }
+    restaurant.imageUrl = uploadResponse.url;
+  }
+
+  await restaurant.save();
+  res.status(200).json(restaurant.toObject());
+});
+
+export { createMyRestaurant, getMyRestaurant, updateMyRestaurant };

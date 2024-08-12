@@ -5,6 +5,7 @@ import { upload } from "../middlewares/multer.middleware";
 import {
   createMyRestaurant,
   getMyRestaurant,
+  updateMyRestaurant,
 } from "../controllers/MyRestaurant.controller";
 
 const router = Router();
@@ -20,5 +21,13 @@ router
   );
 
 router.route("/").get(jwtCheck, jwtParse, getMyRestaurant);
-
+router
+  .route("/")
+  .put(
+    upload.single("imageFile"),
+    validateMyRestaurantRequest,
+    jwtCheck,
+    jwtParse,
+    updateMyRestaurant
+  );
 export default router;
