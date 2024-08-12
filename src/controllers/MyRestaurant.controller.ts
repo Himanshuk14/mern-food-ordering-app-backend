@@ -23,6 +23,7 @@ const createMyRestaurant = asyncHandler(async (req: Request, res: Response) => {
 
   restaurant.lastUpdated = new Date();
   await restaurant.save();
+
   res.status(201).json(restaurant.toObject());
 });
 

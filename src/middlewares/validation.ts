@@ -21,32 +21,25 @@ export const validateMyUserRequest = [
 ];
 
 export const validateMyRestaurantRequest = [
-  body("restaurantName")
-    .isString()
-    .notEmpty()
-    .withMessage("Restaurant Name is required"),
-  body("city").isString().notEmpty().withMessage("City is required"),
-  body("country").isString().notEmpty().withMessage("Country is required"),
+  body("restaurantName").notEmpty().withMessage("Restaurant name is required"),
+  body("city").notEmpty().withMessage("City is required"),
+  body("country").notEmpty().withMessage("Country is required"),
   body("deliveryPrice")
     .isFloat({ min: 0 })
-    .notEmpty()
-    .withMessage("Delivery Price must be a number"),
+    .withMessage("Delivery price must be a positive number"),
   body("estimatedDeliveryTime")
-    .isNumeric()
-    .notEmpty()
-    .withMessage("Estimated Delivery Time must be a number"),
+    .isInt({ min: 0 })
+    .withMessage("Estimated delivery time must be a postivie integar"),
   body("cuisines")
     .isArray()
     .withMessage("Cuisines must be an array")
     .not()
-    .isEmpty(),
-  body("menuItems")
-    .isArray()
-    .notEmpty()
-    .withMessage("Menu Items must be an array"),
-  body("menuItems.*.name").notEmpty().withMessage("Menu Item Name is required"),
+    .isEmpty()
+    .withMessage("Cuisines array cannot be empty"),
+  body("menuItems").isArray().withMessage("Menu items must be an array"),
+  body("menuItems.*.name").notEmpty().withMessage("Menu item name is required"),
   body("menuItems.*.price")
     .isFloat({ min: 0 })
-    .withMessage("Menu Item Name is required and must be a number"),
+    .withMessage("Menu item price is required and must be a postive number"),
   handleValidationErrors,
 ];

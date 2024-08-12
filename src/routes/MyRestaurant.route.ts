@@ -1,6 +1,6 @@
 import { Router } from "express";
 import { jwtCheck, jwtParse } from "../middlewares/auth.middleware";
-import { validateMyUserRequest } from "../middlewares/validation";
+import { validateMyRestaurantRequest } from "../middlewares/validation";
 import { upload } from "../middlewares/multer.middleware";
 import { createMyRestaurant } from "../controllers/MyRestaurant.controller";
 
@@ -10,7 +10,7 @@ router
   .route("/")
   .post(
     upload.single("imageFile"),
-    validateMyUserRequest,
+    validateMyRestaurantRequest,
     jwtCheck,
     jwtParse,
     createMyRestaurant
