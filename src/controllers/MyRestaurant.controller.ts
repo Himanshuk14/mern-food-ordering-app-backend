@@ -27,4 +27,12 @@ const createMyRestaurant = asyncHandler(async (req: Request, res: Response) => {
   res.status(201).json(restaurant.toObject());
 });
 
-export { createMyRestaurant };
+const getMyRestaurant = asyncHandler(async (req: Request, res: Response) => {
+  const restaurant = await Restaurant.findOne({ user: req.userId });
+  if (!restaurant) {
+    return res.status(404).json({ message: "Restaurant not found" });
+  }
+  res.status(200).json(restaurant.toObject());
+});
+
+export { createMyRestaurant, getMyRestaurant };
