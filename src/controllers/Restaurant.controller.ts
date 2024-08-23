@@ -44,7 +44,7 @@ const searchRestaurant = asyncHandler(async (req, res) => {
   const total = await Restaurant.countDocuments(query);
 
   const response = {
-    restaurants,
+    data: restaurants,
     pagination: {
       total,
       page,
