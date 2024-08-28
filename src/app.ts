@@ -9,7 +9,7 @@ app.use(
     credentials: true,
   })
 );
-
+app.use("/order/checkout/webhook", express.raw({ type: "*/*" }));
 app.get("/health", (req, res) => {
   res.send({ message: "Server is up and running" });
 });
