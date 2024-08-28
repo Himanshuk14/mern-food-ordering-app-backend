@@ -1,8 +1,9 @@
 import { Router } from "express";
 import { jwtCheck, jwtParse } from "../middlewares/auth.middleware";
-import { create } from "domain";
+
 import {
   createCheckoutSession,
+  getMyOrders,
   stripeWebhookHandler,
 } from "../controllers/Order.controller";
 
@@ -13,4 +14,5 @@ router
   .post(jwtCheck, jwtParse, createCheckoutSession);
 
 router.route("/checkout/webhook").post(stripeWebhookHandler);
+router.route("/").get(jwtCheck, jwtParse, getMyOrders);
 export default router;
