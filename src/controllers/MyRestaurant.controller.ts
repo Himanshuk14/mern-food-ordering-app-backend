@@ -4,6 +4,7 @@ import Restaurant from "../models/MyRestaurant.model";
 import { uploadOnCloudinary } from "../utils/cloudinary";
 import mongoose from "mongoose";
 import { ApiError } from "../utils/ApiError";
+import Order from "../models/order.model";
 
 const createMyRestaurant = asyncHandler(async (req: Request, res: Response) => {
   const exisitingRestaurant = await Restaurant.findOne({ user: req.userId });
@@ -62,4 +63,49 @@ const updateMyRestaurant = asyncHandler(async (req: Request, res: Response) => {
   res.status(200).json(restaurant.toObject());
 });
 
-export { createMyRestaurant, getMyRestaurant, updateMyRestaurant };
+const getMyRestaurantOrder = async (req: Request, res: Response) => {
+  try {
+    const restaurant = await Restaurant.findOne({ user: req.userId });
+    if (!restaurant) {
+      return res.status(404).json({ message: "Restaurant not found" });
+    }
+    const orders = await Order.find({ restaurant: restaurant._id })
+      .populate("restaurant")
+      .populate("user");
+    res.status(200).json(orders);
+  } catch (error: any) {
+    console.log(error);
+    res.status(500).json({ message: error.raw.message });
+  }
+};
+
+const updateOrderStatus = async (req: Request, res: Response) => {
+  try {
+    const { orderId } = req.params;
+    const { status } = req.body;
+    const order = await Order.findById(orderId);
+    if (!order) {
+      return res.status(404).json({ message: "Order not found" });
+    }
+    const restaurant = await Restaurant.findById(order.restaurant);
+
+    if (restaurant?.user?._id.toString() !== req.userId) {
+      return res.status(401).json({ message: "Unauthorized" });
+    }
+
+    order.status = status;
+    await order.save();
+    res.status(200).json(order);
+  } catch (error: any) {
+    console.log(error);
+    res.status(500).json({ message: error.raw.message });
+  }
+};
+
+export {
+  createMyRestaurant,
+  getMyRestaurant,
+  updateMyRestaurant,
+  getMyRestaurantOrder,
+  updateOrderStatus,
+};

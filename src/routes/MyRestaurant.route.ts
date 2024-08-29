@@ -5,11 +5,17 @@ import { upload } from "../middlewares/multer.middleware";
 import {
   createMyRestaurant,
   getMyRestaurant,
+  getMyRestaurantOrder,
   updateMyRestaurant,
+  updateOrderStatus,
 } from "../controllers/MyRestaurant.controller";
 
 const router = Router();
 
+router.route("/order").get(jwtCheck, jwtParse, getMyRestaurantOrder);
+router
+  .route("/order/:orderId/status")
+  .patch(jwtCheck, jwtParse, updateOrderStatus);
 router
   .route("/")
   .post(
